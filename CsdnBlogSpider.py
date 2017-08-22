@@ -7,6 +7,7 @@ import urllib
 import queue
 import threading
 import os
+from bs4 import BeautifulSoup as bs
 
 
 queue = queue.Queue()
@@ -35,10 +36,11 @@ class CsdnBlogSpider(threading.Thread):
 
 	def find_title(self,data):
 		data = data.decode('utf-8')
-		begin = data.find(r'<title') + 7
-		end = data.find('\r\n',begin)
-		title = data[begin:end]
-		return title
+# 		begin = data.find(r'<title') + 7
+# 		end = data.find('\r\n',begin)
+# 		title = data[begin:end]
+		soup = bs(data)
+		return soup.find("title").text.replace("\n", "").replace("\t", "")
 
 	def run(self):
 		global cnt
